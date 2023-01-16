@@ -2,9 +2,13 @@ package api
 
 import "errors"
 
-type UserService interface {}
+type UserService interface {
+    New (user CreateUserRequest) error
+}
 
-type UserRepository interface {}
+type UserRepository interface {
+    CreateUser (CreateUserRequest) error 
+}
 
 type userService struct {
     db UserRepository 
@@ -27,6 +31,12 @@ func (u *userService) New(user CreateUserRequest) error {
 
     if user.Password== "" {
        return errors.New("user service - Password required")
+    }
+
+    err := u.db.CreateUser(user)
+
+    if err != nil {
+        return err
     }
 
     return nil
