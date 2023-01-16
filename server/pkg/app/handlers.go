@@ -16,7 +16,7 @@ func (u *UserHandler) NewUser (c echo.Context) error {
     err := c.Bind(&createUserRequest) 
 
     if err != nil {
-        return c.String(http.StatusBadRequest, "Bad requests")
+        return c.String(http.StatusBadRequest, "Bad request")
     }
 
     err = u.userService.New(createUserRequest)
