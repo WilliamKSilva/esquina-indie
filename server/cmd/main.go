@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/WilliamKSilva/esquina-indie/pkg/api"
 	"github.com/WilliamKSilva/esquina-indie/pkg/app"
-	infra "github.com/WilliamKSilva/esquina-indie/pkg/infra/db"
+    "github.com/WilliamKSilva/esquina-indie/pkg/web"
+	"github.com/WilliamKSilva/esquina-indie/pkg/infra/db"
 	"github.com/labstack/echo/v4"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -20,19 +20,15 @@ func run () {
         Handler: e,
     }
 
-    routes := app.Routes{
+    routes := web.Routes{
         Router: e, 
     }
-
     
     userRepository := infra.NewUserRepository(db) 
-
-    userService := api.NewUserService(userRepository)
-
-    userHandler := app.UserHandler{
+    userService := app.NewUserService(userRepository)
+    userHandler := web.UserHandler{
         UserService: userService,
     }
-
     routes.SetupRoutes(&userHandler)
 
     err := server.ListenAndServe()

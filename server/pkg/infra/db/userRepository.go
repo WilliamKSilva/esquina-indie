@@ -1,26 +1,22 @@
 package infra
 
 import (
-	"github.com/WilliamKSilva/esquina-indie/pkg/api"
+	"github.com/WilliamKSilva/esquina-indie/pkg/app"
 	"gorm.io/gorm"
 )
-
-type UserRepository interface {
-    CreateUser (user api.CreateUserRequest) (*api.User, error)
-}
 
 type UserRepositoryDb struct {
     connection *gorm.DB
 }
 
-func NewUserRepository (db *gorm.DB) UserRepository {
+func NewUserRepository (db *gorm.DB) app.UserRepository {
     return &UserRepositoryDb{
         connection: db,
     }
 }
 
-func (db UserRepositoryDb) CreateUser (user api.CreateUserRequest) (*api.User, error) {
-    createdUser := api.User{
+func (db UserRepositoryDb) CreateUser (user app.NewUserData) (*app.User, error) {
+    createdUser := app.User{
         Name: user.Name,
         Email: user.Email,
         Password: user.Password,

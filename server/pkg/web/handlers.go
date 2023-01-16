@@ -1,29 +1,31 @@
-package app
+package web 
 
 import (
 	"net/http"
 
-	"github.com/WilliamKSilva/esquina-indie/pkg/api"
+	"github.com/WilliamKSilva/esquina-indie/pkg/app"
 	"github.com/labstack/echo/v4"
 )
 
 type UserHandler struct {
-    UserService api.UserService
+    UserService app.UserService
 }
 
 func (u *UserHandler) NewUser (c echo.Context) error {
-    createUserRequest := api.CreateUserRequest{}
-    err := c.Bind(&createUserRequest) 
+    newUserData := app.NewUserData{}
+    err := c.Bind(&newUserData) 
 
     if err != nil {
         return c.String(http.StatusBadRequest, "Bad request")
     }
 
-    err = u.UserService.New(createUserRequest)
+    user, err := u.UserService.NewUser(newUserData)
 
     if err != nil {
         c.String(http.StatusBadRequest, err.Error())
     }
+
+    c.JSON(http.StatusOK, user) 
     
     return nil
 }

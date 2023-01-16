@@ -1,18 +1,18 @@
-package api
+package app 
 
 import "errors"
-
-type UserService interface {
-    New (user CreateUserRequest) (*User, error) 
-}
-
-type UserRepository interface {
-    CreateUser (CreateUserRequest) (*User, error) 
-}
 
 type userService struct {
     repo UserRepository 
 }
+
+type User struct {
+    ID string `json:"id"`
+    Name string `json:"name"`
+    Email string `json:"email"`
+    Password string `json:"password"`
+}
+
 
 func NewUserService(repo UserRepository) UserService {
     return &userService{
@@ -20,7 +20,7 @@ func NewUserService(repo UserRepository) UserService {
     }
 }
 
-func (u *userService) New(user CreateUserRequest) (*User, error) {
+func (u *userService) NewUser(user NewUserData) (*User, error) {
     if user.Name == "" {
        return nil, errors.New("user service - Name required")
     }
