@@ -3,41 +3,41 @@ package api
 import "errors"
 
 type UserService interface {
-    New (user CreateUserRequest) error
+    New (user CreateUserRequest) (*User, error) 
 }
 
 type UserRepository interface {
-    CreateUser (CreateUserRequest) error 
+    CreateUser (CreateUserRequest) (*User, error) 
 }
 
 type userService struct {
-    db UserRepository 
+    repo UserRepository 
 }
 
 func NewUserService(repo UserRepository) UserService {
     return &userService{
-        db: repo,
+        repo: repo,
     }
 }
 
-func (u *userService) New(user CreateUserRequest) error {
+func (u *userService) New(user CreateUserRequest) (*User, error) {
     if user.Name == "" {
-       return errors.New("user service - Name required")
+       return nil, errors.New("user service - Name required")
     }
 
     if user.Email== "" {
-       return errors.New("user service - Email required")
+       return nil, errors.New("user service - Email required")
     }
 
     if user.Password== "" {
-       return errors.New("user service - Password required")
+       return nil, errors.New("user service - Password required")
     }
 
-    err := u.db.CreateUser(user)
+    createdUser, err := u.repo.CreateUser(user)
 
     if err != nil {
-        return err
+        return nil, err 
     }
 
-    return nil
+    return createdUser, nil 
 }

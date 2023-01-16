@@ -2,10 +2,10 @@ package app
 
 import "github.com/labstack/echo/v4"
 
-type Router struct {
-    echo *echo.Echo
+type Routes struct {
+    Router *echo.Echo
 }
 
-func (r *Router) setupRoutes(userHandler *UserHandler) {
-    r.echo.POST("/users", userHandler.NewUser)
+func (r *Routes) SetupRoutes(userHandler *UserHandler) {
+    r.Router.POST("/users", userHandler.NewUser)
 }

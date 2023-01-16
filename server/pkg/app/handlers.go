@@ -8,7 +8,7 @@ import (
 )
 
 type UserHandler struct {
-    userService api.UserService
+    UserService api.UserService
 }
 
 func (u *UserHandler) NewUser (c echo.Context) error {
@@ -19,7 +19,7 @@ func (u *UserHandler) NewUser (c echo.Context) error {
         return c.String(http.StatusBadRequest, "Bad request")
     }
 
-    err = u.userService.New(createUserRequest)
+    err = u.UserService.New(createUserRequest)
 
     if err != nil {
         c.String(http.StatusBadRequest, err.Error())

@@ -6,14 +6,20 @@ import (
 )
 
 type UserRepository interface {
-    Create(user api.CreateUserRequest) (api.User, error)
+    CreateUser (user api.CreateUserRequest) (*api.User, error)
 }
 
-type Db struct {
+type UserRepositoryDb struct {
     connection *gorm.DB
 }
 
-func (db Db) Create(user api.CreateUserRequest) (*api.User, error) {
+func NewUserRepository (db *gorm.DB) UserRepository {
+    return &UserRepositoryDb{
+        connection: db,
+    }
+}
+
+func (db UserRepositoryDb) CreateUser (user api.CreateUserRequest) (*api.User, error) {
     createdUser := api.User{
         Name: user.Name,
         Email: user.Email,
