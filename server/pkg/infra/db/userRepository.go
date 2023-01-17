@@ -43,3 +43,15 @@ func (db UserRepositoryDb) FindUser (id int) (*app.User, error) {
 
     return &user, nil
 }
+
+func (db UserRepositoryDb) FindUserByEmail (email string) (*app.User, error) {
+    user := app.User{} 
+
+    err := db.connection.First(&user, "email = ?", email).Error
+
+    if err != nil {
+        return nil, err
+    }
+
+    return &user, nil
+}

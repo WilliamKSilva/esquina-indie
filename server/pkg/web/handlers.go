@@ -23,7 +23,7 @@ func (u *UserHandler) NewUser (c echo.Context) error {
     user, err := u.UserService.NewUser(newUserData)
 
     if err != nil {
-        c.String(http.StatusBadRequest, err.Error())
+        return c.String(http.StatusBadRequest, err.Error())
     }
 
     c.JSON(http.StatusOK, user) 
@@ -51,4 +51,3 @@ func (u *UserHandler) FindUser (c echo.Context) error {
     return nil
 }
      
-

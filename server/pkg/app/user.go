@@ -34,7 +34,13 @@ func (u *userService) NewUser(user NewUserData) (*User, error) {
     }
 
     if user.Password== "" {
-       return nil, errors.New("user service - Password required")
+        return nil, errors.New("user service - Password required")
+    }
+
+    userExists, err := u.repo.FindUserByEmail(user.Email)
+
+    if userExists.Email != "" {
+        return nil, errors.New("user service - User already exists")
     }
 
     createdUser, err := u.repo.CreateUser(user)
@@ -51,6 +57,25 @@ func (u *userService) FindUser (id int) (*User, error) {
 
     if err != nil {
         return nil, err
+    }
+
+    return user, nil
+}
+
+
+func (u *userService) FindUserByEmail (email string) (*User, error) {
+    if email == "" {
+        return nil,  errors.New("user service - Provide an valid email")
+    }
+
+    user, err := u.FindUserByEmail(email)
+
+    if err != nil {
+        return nil, err
+    }
+
+    if user == nil {
+        return nil, errors.New("user service - User not found")
     }
 
     return user, nil
