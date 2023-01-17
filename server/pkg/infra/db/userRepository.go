@@ -17,6 +17,7 @@ func NewUserRepository (db *gorm.DB) app.UserRepository {
 
 func (db UserRepositoryDb) CreateUser (user app.NewUserData) (*app.User, error) {
     createdUser := app.User{
+        ID: 0,
         Name: user.Name,
         Email: user.Email,
         Password: user.Password,
@@ -28,5 +29,5 @@ func (db UserRepositoryDb) CreateUser (user app.NewUserData) (*app.User, error) 
         return nil, err
     }
 
-    return nil, err
+    return &createdUser, err
 }

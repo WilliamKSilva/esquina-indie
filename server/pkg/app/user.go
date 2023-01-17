@@ -10,11 +10,11 @@ type userService struct {
 }
 
 type User struct {
-    ID string `json:"id" gorm:"primaryKey"`
+    ID uint `json:"id" gorm:"primaryKey"`
     Name string `json:"name"`
     Email string `json:"email"`
     Password string `json:"password"`
-    CreatedAt time.Time
+    CreatedAt time.Time `json:"created_at"`
 }
 
 
@@ -45,3 +45,5 @@ func (u *userService) NewUser(user NewUserData) (*User, error) {
 
     return createdUser, nil 
 }
+
+
