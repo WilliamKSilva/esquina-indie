@@ -31,3 +31,15 @@ func (db UserRepositoryDb) CreateUser (user app.NewUserData) (*app.User, error) 
 
     return &createdUser, err
 }
+
+func (db UserRepositoryDb) FindUser (id int) (*app.User, error) {
+    user := app.User{} 
+
+    err := db.connection.First(&user, id).Error
+
+    if err != nil {
+        return nil, err
+    }
+
+    return &user, nil
+}

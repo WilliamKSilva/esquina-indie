@@ -10,7 +10,7 @@ type userService struct {
 }
 
 type User struct {
-    ID uint `json:"id" gorm:"primaryKey"`
+    ID int `json:"id" gorm:"primaryKey"`
     Name string `json:"name"`
     Email string `json:"email"`
     Password string `json:"password"`
@@ -46,4 +46,12 @@ func (u *userService) NewUser(user NewUserData) (*User, error) {
     return createdUser, nil 
 }
 
+func (u *userService) FindUser (id int) (*User, error) {
+    user, err := u.repo.FindUser(id) 
 
+    if err != nil {
+        return nil, err
+    }
+
+    return user, nil
+}

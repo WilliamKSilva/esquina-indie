@@ -8,4 +8,5 @@ type Routes struct {
 
 func (r *Routes) SetupRoutes(userHandler *UserHandler) {
     r.Router.POST("/users", userHandler.NewUser)
+    r.Router.GET("/users/:id", userHandler.FindUser)
 }
