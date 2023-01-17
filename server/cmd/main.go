@@ -5,20 +5,14 @@ import (
 	"net/http"
 
 	"github.com/WilliamKSilva/esquina-indie/pkg/app"
-    "github.com/WilliamKSilva/esquina-indie/pkg/web"
 	"github.com/WilliamKSilva/esquina-indie/pkg/infra/db"
+	"github.com/WilliamKSilva/esquina-indie/pkg/web"
 	"github.com/labstack/echo/v4"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 )
 
 func main () {
     e := echo.New()
-    db := connectDB()
-    server := http.Server{
-        Addr: ":3333",
-        Handler: e,
-    }
+    db := infra.ConnectDB()
 
     routes := web.Routes{
         Router: e, 
@@ -29,23 +23,14 @@ func main () {
     userHandler := web.UserHandler{
         UserService: userService,
     }
+
     routes.SetupRoutes(&userHandler)
 
-    err := server.ListenAndServe()
-
+    err := e.Start(":3333") 
     if err != http.ErrServerClosed {
         log.Fatal(err)
     }
 }
 
-func connectDB () *gorm.DB {  
-    dsn := "test"
-    db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
-    if err != nil {
-        panic(err)
-    }
-
-    return db
-}
 
