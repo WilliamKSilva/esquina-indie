@@ -12,7 +12,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func run () {
+func main () {
     e := echo.New()
     db := connectDB()
     server := http.Server{
