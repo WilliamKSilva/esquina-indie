@@ -1,4 +1,4 @@
-package app
+package api 
 
 type UserService interface {
     NewUser (user NewUserData) (*User, error) 

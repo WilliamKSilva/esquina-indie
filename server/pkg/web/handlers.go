@@ -4,16 +4,16 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/WilliamKSilva/esquina-indie/pkg/app"
+	"github.com/WilliamKSilva/esquina-indie/pkg/api"
 	"github.com/labstack/echo/v4"
 )
 
 type UserHandler struct {
-    UserService app.UserService
+    UserService api.UserService
 }
 
 func (u *UserHandler) NewUser (c echo.Context) error {
-    newUserData := app.NewUserData{}
+    newUserData := api.NewUserData{}
     err := c.Bind(&newUserData) 
 
     if err != nil {

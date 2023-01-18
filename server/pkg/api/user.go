@@ -1,4 +1,4 @@
-package app
+package api 
 
 import (
 	"errors"
@@ -16,7 +16,6 @@ type User struct {
     Password string `json:"password"`
     CreatedAt time.Time `json:"created_at"`
 }
-
 
 func NewUserService(repo UserRepository) UserService {
     return &userService{

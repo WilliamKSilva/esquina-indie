@@ -1,7 +1,7 @@
 package infra
 
 import (
-	"github.com/WilliamKSilva/esquina-indie/pkg/app"
+	"github.com/WilliamKSilva/esquina-indie/pkg/api"
 	"gorm.io/gorm"
 )
 
@@ -9,14 +9,14 @@ type UserRepositoryDb struct {
     connection *gorm.DB
 }
 
-func NewUserRepository (db *gorm.DB) app.UserRepository {
+func NewUserRepository (db *gorm.DB) api.UserRepository {
     return &UserRepositoryDb{
         connection: db,
     }
 }
 
-func (db UserRepositoryDb) CreateUser (user app.NewUserData) (*app.User, error) {
-    createdUser := app.User{
+func (db UserRepositoryDb) CreateUser (user api.NewUserData) (*api.User, error) {
+    createdUser := api.User{
         ID: 0,
         Name: user.Name,
         Email: user.Email,
@@ -32,8 +32,8 @@ func (db UserRepositoryDb) CreateUser (user app.NewUserData) (*app.User, error) 
     return &createdUser, err
 }
 
-func (db UserRepositoryDb) FindUser (id int) (*app.User, error) {
-    user := app.User{} 
+func (db UserRepositoryDb) FindUser (id int) (*api.User, error) {
+    user := api.User{} 
 
     err := db.connection.First(&user, id).Error
 
@@ -44,8 +44,8 @@ func (db UserRepositoryDb) FindUser (id int) (*app.User, error) {
     return &user, nil
 }
 
-func (db UserRepositoryDb) FindUserByEmail (email string) (*app.User, error) {
-    user := app.User{} 
+func (db UserRepositoryDb) FindUserByEmail (email string) (*api.User, error) {
+    user := api.User{} 
 
     err := db.connection.First(&user, "email = ?", email).Error
 
