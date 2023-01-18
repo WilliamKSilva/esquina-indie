@@ -38,11 +38,22 @@ func (u dummyUserRepository) FindUserByEmail(email string) (*User, error) {
 	}, nil
 }
 
-func TestNewUser(t *testing.T) {
+func TestNewUserShouldThrowIfNameMissing(t *testing.T) {
 	userService := NewUserService(dummyUserRepository{})
 
 	want := errors.New("user service - Name required").Error()
 	_, got := userService.NewUser(NewUserData{Email: "test", Password: "test"})
+
+	if got.Error() != want {
+		t.Errorf("Want '%s', got '%s'", want, got)
+	}
+}
+
+func TestNewUserShouldThrowIfEmailMissing(t *testing.T) {
+	userService := NewUserService(dummyUserRepository{})
+
+	want := errors.New("user service - Email required").Error()
+    _, got := userService.NewUser(NewUserData{Name: "test", Password: "test"})
 
 	if got.Error() != want {
 		t.Errorf("Want '%s', got '%s'", want, got)
