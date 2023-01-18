@@ -31,21 +31,27 @@ func (u dummyUserRepositoryFindUserByEmail) FindUser(id int) (*api.User, error) 
 }
 
 func (u dummyUserRepositoryFindUserByEmail) FindUserByEmail(email string) (*api.User, error) {
-	return &api.User{
-		ID:        1,
-		Name:      "test",
-		Email:     "test@test.com",
-		Password:  "test12345",
-		CreatedAt: time.Now(),
-	}, nil
+	return nil, nil
 }
 
 func TestFindUserByEmailThrowIfEmailNotProvided (t *testing.T) {
-    dummyUserRepository := dummyUserRepositoryFindUserByEmail{}
+    dummyUserRepository := &dummyUserRepositoryFindUserByEmail{}
     userService := api.NewUserService(dummyUserRepository)
 
     want := errors.New("user service - Email required").Error() 
     _, got := userService.FindUserByEmail("")
+
+    if want != got.Error() {
+        t.Errorf("Want '%s', got '%s'", want, got)
+    }
+}
+
+func TestFindUserByEmailShouldThrowIfUserNotFound (t *testing.T) {
+    dummyUserRepository := &dummyUserRepositoryFindUserByEmail{}
+    userService := api.NewUserService(dummyUserRepository)
+
+    want := errors.New("user service - User not found").Error() 
+    _, got := userService.FindUserByEmail("test@test.com")
 
     if want != got.Error() {
         t.Errorf("Want '%s', got '%s'", want, got)
