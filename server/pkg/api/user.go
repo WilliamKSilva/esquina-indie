@@ -62,7 +62,7 @@ func (u *userService) FindUser (id int) (*User, error) {
 
 func (u *userService) FindUserByEmail (email string) (*User, error) {
     if email == "" {
-        return nil,  errors.New("user service - Provide an valid email")
+        return nil,  errors.New("user service - Email required")
     }
 
     user, err := u.FindUserByEmail(email)
