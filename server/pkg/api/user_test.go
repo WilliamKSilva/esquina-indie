@@ -59,3 +59,14 @@ func TestNewUserShouldThrowIfEmailMissing(t *testing.T) {
 		t.Errorf("Want '%s', got '%s'", want, got)
 	}
 }
+
+func TestNewUserShouldThrowIfPasswordMissing(t *testing.T) {
+	userService := NewUserService(dummyUserRepository{})
+
+	want := errors.New("user service - Password required").Error()
+    _, got := userService.NewUser(NewUserData{Email: "test", Name: "test"})
+
+	if got.Error() != want {
+		t.Errorf("Want '%s', got '%s'", want, got)
+	}
+}
