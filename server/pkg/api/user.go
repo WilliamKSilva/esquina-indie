@@ -46,6 +46,10 @@ func (u *userService) NewUser(user NewUserData) (*User, error) {
 }
 
 func (u *userService) FindUser (id int) (*User, error) {
+    if id <= 0 {
+        return nil, errors.New("user service - Invalid id")
+    }
+
     user, err := u.repo.FindUser(id) 
 
     if err != nil {
