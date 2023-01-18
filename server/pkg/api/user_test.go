@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type dummyUserRepository struct{}
+type dummyUserRepository struct {}
 
 func (u dummyUserRepository) CreateUser(user NewUserData) (*User, error) {
 	return &User{
@@ -35,7 +35,7 @@ func (u dummyUserRepository) FindUserByEmail(email string) (*User, error) {
 		Email:     "teste",
 		Password:  "teste",
 		CreatedAt: time.Now(),
-	}, nil
+	} , nil
 }
 
 func TestNewUserShouldThrowIfNameMissing(t *testing.T) {
@@ -71,15 +71,15 @@ func TestNewUserShouldThrowIfPasswordMissing(t *testing.T) {
 	}
 }
 
-func TestNewUserCallUserRepositoryWithTheRightData(t *testing.T) {
+func TestNewUserShoudThrowIfUserAlreadyExists(t *testing.T) {
 	userService := NewUserService(dummyUserRepository{})
 	newUserData := NewUserData{Email: "test", Name: "test@test.com", Password: "test12345"}
 
-	user, _ := userService.NewUser(newUserData)
+    want := errors.New("user service - User already exists").Error()
+	_, got := userService.NewUser(newUserData)
 
-	if user != nil {
-		if user.Name != newUserData.Name {
-			t.Errorf("Want '%s', got '%s'", newUserData.Name, user.Name)
-		}
-	}
+
+    if got.Error() != want {
+        t.Errorf("Want '%s', got '%s'", want, got)
+    }
 }
