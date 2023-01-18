@@ -4,13 +4,15 @@ import (
 	"errors"
 	"testing"
 	"time"
+
+	"github.com/WilliamKSilva/esquina-indie/pkg/api"
 )
 
 type dummyUserRepository struct {}
 
 
-func (u dummyUserRepository) CreateUser(user NewUserData) (*User, error) {
-	return &User{
+func (u dummyUserRepository) CreateUser(user api.NewUserData) (*api.User, error) {
+	return &api.User{
 		ID:        1,
 		Name:      user.Name,
 		Email:     user.Email,
@@ -19,8 +21,8 @@ func (u dummyUserRepository) CreateUser(user NewUserData) (*User, error) {
 	}, nil
 }
 
-func (u dummyUserRepository) FindUser(id int) (*User, error) {
-	return &User{
+func (u dummyUserRepository) FindUser(id int) (*api.User, error) {
+	return &api.User{
 		ID:        1,
 		Name:      "test",
 		Email:     "teste",
@@ -29,15 +31,15 @@ func (u dummyUserRepository) FindUser(id int) (*User, error) {
 	}, nil
 }
 
-func (u dummyUserRepository) FindUserByEmail(email string) (*User, error) {
+func (u dummyUserRepository) FindUserByEmail(email string) (*api.User, error) {
 	return nil , nil
 }
 
 func TestNewUserShouldThrowIfNameMissing(t *testing.T) {
-	userService := NewUserService(dummyUserRepository{})
+	userService := api.NewUserService(dummyUserRepository{})
 
 	want := errors.New("user service - Name required").Error()
-	_, got := userService.NewUser(NewUserData{Email: "test", Password: "test"})
+	_, got := userService.NewUser(api.NewUserData{Email: "test", Password: "test"})
 
 	if got.Error() != want {
 		t.Errorf("Want '%s', got '%s'", want, got)
@@ -45,10 +47,10 @@ func TestNewUserShouldThrowIfNameMissing(t *testing.T) {
 }
 
 func TestNewUserShouldThrowIfEmailMissing(t *testing.T) {
-	userService := NewUserService(dummyUserRepository{})
+	userService := api.NewUserService(dummyUserRepository{})
 
 	want := errors.New("user service - Email required").Error()
-	_, got := userService.NewUser(NewUserData{Name: "test", Password: "test"})
+	_, got := userService.NewUser(api.NewUserData{Name: "test", Password: "test"})
 
 	if got.Error() != want {
 		t.Errorf("Want '%s', got '%s'", want, got)
@@ -56,10 +58,10 @@ func TestNewUserShouldThrowIfEmailMissing(t *testing.T) {
 }
 
 func TestNewUserShouldThrowIfPasswordMissing(t *testing.T) {
-	userService := NewUserService(dummyUserRepository{})
+	userService := api.NewUserService(dummyUserRepository{})
 
 	want := errors.New("user service - Password required").Error()
-	_, got := userService.NewUser(NewUserData{Email: "test", Name: "test"})
+	_, got := userService.NewUser(api.NewUserData{Email: "test", Name: "test"})
 
 	if got.Error() != want {
 		t.Errorf("Want '%s', got '%s'", want, got)
@@ -68,8 +70,8 @@ func TestNewUserShouldThrowIfPasswordMissing(t *testing.T) {
 
 func TestNewUserShouldCallRepositoryAndReturnAUser(t *testing.T) {
     userRepositorySpy := &dummyUserRepository{}
-	userService := NewUserService(userRepositorySpy)
-	newUserData := NewUserData{Email: "test@test.com", Name: "test", Password: "test12345"}
+	userService := api.NewUserService(userRepositorySpy)
+	newUserData := api.NewUserData{Email: "test@test.com", Name: "test", Password: "test12345"}
 
 	user, _:= userService.NewUser(newUserData)
 
