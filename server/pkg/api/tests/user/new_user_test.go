@@ -1,4 +1,4 @@
-package api
+package user 
 
 import (
 	"errors"
@@ -8,10 +8,9 @@ import (
 	"github.com/WilliamKSilva/esquina-indie/pkg/api"
 )
 
-type dummyUserRepository struct {}
+type dummyUserRepositoryCreateUser struct {}
 
-
-func (u dummyUserRepository) CreateUser(user api.NewUserData) (*api.User, error) {
+func (u dummyUserRepositoryCreateUser) CreateUser(user api.NewUserData) (*api.User, error) {
 	return &api.User{
 		ID:        1,
 		Name:      user.Name,
@@ -21,7 +20,7 @@ func (u dummyUserRepository) CreateUser(user api.NewUserData) (*api.User, error)
 	}, nil
 }
 
-func (u dummyUserRepository) FindUser(id int) (*api.User, error) {
+func (u dummyUserRepositoryCreateUser) FindUser(id int) (*api.User, error) {
 	return &api.User{
 		ID:        1,
 		Name:      "test",
@@ -31,12 +30,12 @@ func (u dummyUserRepository) FindUser(id int) (*api.User, error) {
 	}, nil
 }
 
-func (u dummyUserRepository) FindUserByEmail(email string) (*api.User, error) {
+func (u dummyUserRepositoryCreateUser) FindUserByEmail(email string) (*api.User, error) {
 	return nil , nil
 }
 
 func TestNewUserShouldThrowIfNameMissing(t *testing.T) {
-	userService := api.NewUserService(dummyUserRepository{})
+	userService := api.NewUserService(dummyUserRepositoryCreateUser{})
 
 	want := errors.New("user service - Name required").Error()
 	_, got := userService.NewUser(api.NewUserData{Email: "test", Password: "test"})
@@ -47,7 +46,7 @@ func TestNewUserShouldThrowIfNameMissing(t *testing.T) {
 }
 
 func TestNewUserShouldThrowIfEmailMissing(t *testing.T) {
-	userService := api.NewUserService(dummyUserRepository{})
+	userService := api.NewUserService(dummyUserRepositoryCreateUser{})
 
 	want := errors.New("user service - Email required").Error()
 	_, got := userService.NewUser(api.NewUserData{Name: "test", Password: "test"})
@@ -58,7 +57,7 @@ func TestNewUserShouldThrowIfEmailMissing(t *testing.T) {
 }
 
 func TestNewUserShouldThrowIfPasswordMissing(t *testing.T) {
-	userService := api.NewUserService(dummyUserRepository{})
+	userService := api.NewUserService(dummyUserRepositoryCreateUser{})
 
 	want := errors.New("user service - Password required").Error()
 	_, got := userService.NewUser(api.NewUserData{Email: "test", Name: "test"})
@@ -69,7 +68,7 @@ func TestNewUserShouldThrowIfPasswordMissing(t *testing.T) {
 }
 
 func TestNewUserShouldCallRepositoryAndReturnAUser(t *testing.T) {
-    userRepositorySpy := &dummyUserRepository{}
+    userRepositorySpy := &dummyUserRepositoryCreateUser{}
 	userService := api.NewUserService(userRepositorySpy)
 	newUserData := api.NewUserData{Email: "test@test.com", Name: "test", Password: "test12345"}
 
