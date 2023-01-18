@@ -36,12 +36,6 @@ func (u *userService) NewUser(user NewUserData) (*User, error) {
         return nil, errors.New("user service - Password required")
     }
 
-    userExists, err := u.repo.FindUserByEmail(user.Email)
-
-    if userExists.Email != "" {
-        return nil, errors.New("user service - User already exists")
-    }
-
     createdUser, err := u.repo.CreateUser(user)
 
     if err != nil {

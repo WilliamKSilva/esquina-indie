@@ -8,6 +8,7 @@ import (
 
 type dummyUserRepository struct {}
 
+
 func (u dummyUserRepository) CreateUser(user NewUserData) (*User, error) {
 	return &User{
 		ID:        1,
@@ -29,13 +30,7 @@ func (u dummyUserRepository) FindUser(id int) (*User, error) {
 }
 
 func (u dummyUserRepository) FindUserByEmail(email string) (*User, error) {
-	return &User{
-		ID:        1,
-		Name:      "test",
-		Email:     "teste",
-		Password:  "teste",
-		CreatedAt: time.Now(),
-	} , nil
+	return nil , nil
 }
 
 func TestNewUserShouldThrowIfNameMissing(t *testing.T) {
@@ -71,15 +66,14 @@ func TestNewUserShouldThrowIfPasswordMissing(t *testing.T) {
 	}
 }
 
-func TestNewUserShoudThrowIfUserAlreadyExists(t *testing.T) {
-	userService := NewUserService(dummyUserRepository{})
-	newUserData := NewUserData{Email: "test", Name: "test@test.com", Password: "test12345"}
+func TestNewUserShouldCallRepositoryAndReturnAUser(t *testing.T) {
+    userRepositorySpy := &dummyUserRepository{}
+	userService := NewUserService(userRepositorySpy)
+	newUserData := NewUserData{Email: "test@test.com", Name: "test", Password: "test12345"}
 
-    want := errors.New("user service - User already exists").Error()
-	_, got := userService.NewUser(newUserData)
+	user, _:= userService.NewUser(newUserData)
 
-
-    if got.Error() != want {
-        t.Errorf("Want '%s', got '%s'", want, got)
+    if user.Name != newUserData.Name {
+        t.Errorf("Want '%s', got '%s'", newUserData.Name, user.Name)
     }
 }
