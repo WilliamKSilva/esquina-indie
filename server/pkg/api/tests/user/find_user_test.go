@@ -24,8 +24,8 @@ func (u dummyUserRepositoryFindUser) FindUser(id int) (*api.User, error) {
 	return &api.User{
 		ID:        1,
 		Name:      "test",
-		Email:     "teste",
-		Password:  "teste",
+		Email:     "test@test.com",
+		Password:  "test12345",
 		CreatedAt: time.Now(),
 	}, nil
 }
@@ -34,7 +34,7 @@ func (u dummyUserRepositoryFindUser) FindUserByEmail(email string) (*api.User, e
 	return nil , nil
 }
 
-func TestFindUserShoudReturnAnErrorIfInvalidIdIsProvided (t *testing.T) {
+func TestFindUserShouldReturnAnErrorIfInvalidIdIsProvided (t *testing.T) {
     dummyUserRepository := &dummyUserRepositoryFindUser{}
     userService := api.NewUserService(dummyUserRepository) 
 
@@ -45,4 +45,16 @@ func TestFindUserShoudReturnAnErrorIfInvalidIdIsProvided (t *testing.T) {
         t.Errorf("Want '%s', got '%s'", want, got)
     }
 
+}
+
+func TestFindUserShoulReturnAnUserOnSuccess (t *testing.T) {
+    dummyUserRepository := &dummyUserRepositoryFindUser{}
+    userService := api.NewUserService(dummyUserRepository) 
+
+    want := "test"
+    got, _ := userService.FindUser(1)
+
+    if want != got.Name {
+        t.Errorf("Want '%s', got '%s'", want, got.Name)
+    }
 }
