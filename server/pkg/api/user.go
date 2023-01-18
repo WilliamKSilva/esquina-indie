@@ -1,4 +1,4 @@
-package api 
+package api
 
 import (
 	"errors"
@@ -65,7 +65,7 @@ func (u *userService) FindUserByEmail (email string) (*User, error) {
         return nil,  errors.New("user service - Email required")
     }
 
-    user, err := u.FindUserByEmail(email)
+    user, err := u.repo.FindUserByEmail(email)
 
     if err != nil {
         return nil, err
