@@ -24,6 +24,12 @@ func main () {
         UserService: userService,
     }
 
+    postRepository := infra.NewPostRepository(db) 
+    postService := api.NewPostService(postRepository)
+    postHandler := web.PostHandler{
+        PostService: postService,
+    }
+
     routes.SetupRoutes(&userHandler)
 
     err := e.Start(":3333") 

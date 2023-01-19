@@ -12,6 +12,10 @@ type UserHandler struct {
     UserService api.UserService
 }
 
+type PostHandler struct {
+    PostService api.PostService
+}
+
 func (u *UserHandler) NewUser (c echo.Context) error {
     newUserData := api.NewUserData{}
     err := c.Bind(&newUserData) 
@@ -50,4 +54,33 @@ func (u *UserHandler) FindUser (c echo.Context) error {
 
     return nil
 }
+
+type header struct {
+    Authorization string `header:"Authorization"`
+}
      
+func (u *PostHandler) NewPost (c echo.Context) error {
+    auth := header{}
+    c.Bind(&auth)
+
+    newPostData := api.NewPostData{}
+
+    c.Bind(&newPostData)
+
+    userId, err := strconv.Atoi(auth.Authorization)
+
+    if err != nil {
+        return c.String(http.StatusBadRequest, "post service - Invalid authorization header")
+    }
+
+    post, err := u.PostService.NewPost(newPostData, userId)
+
+    if err != nil {
+        return c.String(http.StatusBadRequest, err.Error())
+    }
+
+    c.JSON(http.StatusOK, post)
+
+    return nil
+}
+    

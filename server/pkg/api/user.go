@@ -14,6 +14,7 @@ type User struct {
     Name string `json:"name"`
     Email string `json:"email" gorm:"unique"`
     Password string `json:"password"`
+    Post Post `json:"posts" gorm:"foreignKey:UserId"` 
     CreatedAt time.Time `json:"created_at"`
 }
 
